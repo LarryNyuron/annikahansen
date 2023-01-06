@@ -10,7 +10,7 @@ def SiteSaver():   #Функция сохраняет сайт, шоб не за
         file.write(src)
 
 SiteSaver()
-print(url)
+
 with open('index.html') as file:
     src = file.read()
 
@@ -52,7 +52,6 @@ def UrlPicker(): #Отбирает ссылку по запросу для пе�
     file.close()
 
 UrlPicker()
-print(url)
 
 
 
