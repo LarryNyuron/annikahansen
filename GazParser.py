@@ -1,9 +1,14 @@
 import requests
 from bs4 import BeautifulSoup
 
-url = "https://www.gazpromnoncoreassets.ru/auctions/purpose/proizvodstvennye-sklady-i-bazy/auctiontype/announces/"
-#url = input('Введите ссылку на сайт: ')
-def SiteSaver():   #Функция сохраняет сайт, шоб не забанили
+
+url = 'https://www.gazpromnoncoreassets.ru/auctions/purpose/proizvodstvennye-sklady-i-bazy/auctiontype/announces/"
+
+
+def SiteSaver(url):
+    '''
+    Функция сохраняет сайт,чтоб не забанили
+    '''
     req = requests.get(url)
     src = req.text
     with open('index.html', 'w') as file:
@@ -19,7 +24,7 @@ AI = BeautifulSoup(src,'lxml')
 
 ImgList = []
 def ImgParser():    #Функция парсит картинки с сайта
-    AllInfo = AI.find_all('div', class_='thumb') 
+    AllInfo = AI.find_all('div', class_='thumb')
     all_img = []
     for i in AllInfo:
         all_img.append(i.img['src'])
@@ -36,7 +41,6 @@ def AnnounceParser(): #Копирует ссылки на продажу и со
         a = i.find('a')
         gethref = a.get('href')
     print(gethref)
-
 
 
     f.write("\n".join(map(str,gethref)))
@@ -73,5 +77,3 @@ def SiteSaver2():   #Функция сохраняет сайт, шоб не з�
 SiteSaver2()
 
 """
-
-
