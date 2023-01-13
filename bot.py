@@ -9,7 +9,8 @@ from inline_keyboard.inline_keyboard import create_inline_bloc, \
                                             alphabet_keyboard, \
                                             create_inline_bloc_with_region, \
                                             create_inline_bloc_square, \
-                                            create_inline_bloc_price
+                                            create_inline_bloc_price,\
+                                            create_inline_bloc_list
 from inline_keyboard.inline_keyboard import REGION
 
 
@@ -52,6 +53,21 @@ async def plug(callback: types.CallbackQuery):
     await callback.message.edit_text(text='Пока это заглушка, пиши /start')
 
 
+async def list_of_land(callback: types.CallbackQuery):
+    await callback.message.edit_text(text='Пример\n1.Some /someurl,\n2.Some\
+/someurl,\n3.Some /someurl,\netc.',  reply_markup=create_inline_bloc_list())
+
+
+
+async def object_card(callback: types.CallbackQuery):
+    await callback.message.edit_text(text='Населенный пункт: {}\nПлощадь {}\n\
+Кадастровый номер {}\nПраво собственности {}\nЦена {}\n'.format('Rostov',    \
+'150', '1488', 'Uncle Frank', '100500$'),
+        reply_markup=create_inline_bloc(create_inline_callback_button('Назад', \
+                                                              'back')))
+
+
+
 dp.register_callback_query_handler(what_alphabet_region,
                                    text='land')
 dp.register_callback_query_handler(what_region,
@@ -62,10 +78,11 @@ dp.register_callback_query_handler(square,
                                    text='some region')
 dp.register_callback_query_handler(price,
                                    text='some price')
+dp.register_callback_query_handler(list_of_land,
+                                   text='list')
+dp.register_callback_query_handler(object_card,
+                                   text='card')
 
-'''
-dp.register_callback_query_handler(price,
-                                   text='back')
-'''
+
 if __name__ == '__main__':
     executor.start_polling(dp)

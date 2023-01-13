@@ -44,6 +44,7 @@ REGION = {
 SQUARE = ['<500', '500-1000', '1000-10000', '10000>']
 PRICE = ['<250', '250-1', '1-5', '5>']
 
+
 def create_inline_callback_button(text: str, callback: str):
     button = types.InlineKeyboardButton(
         text=text,
@@ -86,6 +87,14 @@ def create_inline_bloc_square(square=SQUARE, values=SQUARE):
 def create_inline_bloc_price(price=PRICE, values=PRICE):
     keyboard = types.InlineKeyboardMarkup(row_width=2)
     for button in PRICE:
-        keyboard.insert(create_inline_callback_button(button, button))
+        keyboard.insert(create_inline_callback_button(button, 'list'))
+    keyboard.insert(create_inline_callback_button('Назад', 'back'))
+    return keyboard
+
+
+def create_inline_bloc_list():
+    keyboard = types.InlineKeyboardMarkup(row_width=5)
+    for button in ['<', '1', '2', '3', '>']:
+        keyboard.insert(create_inline_callback_button(button, 'card'))
     keyboard.insert(create_inline_callback_button('Назад', 'back'))
     return keyboard
