@@ -41,7 +41,8 @@ REGION = {
          'Чукотский автономный округ'],
     'Я':['Ярославская область', 'Ямало-Ненецкий автономный округ']
 }
-
+SQUARE = ['<500', '500-1000', '1000-10000', '10000>']
+PRICE = ['<250', '250-1', '1-5', '5>']
 
 def create_inline_callback_button(text: str, callback: str):
     button = types.InlineKeyboardButton(
@@ -69,6 +70,22 @@ def alphabet_keyboard():
 def create_inline_bloc_with_region(letter):
     keyboard = types.InlineKeyboardMarkup(row_width=2)
     for button in REGION[letter]:
+        keyboard.insert(create_inline_callback_button(button, 'some region'))
+    keyboard.insert(create_inline_callback_button('Назад', 'back'))
+    return keyboard
+
+
+def create_inline_bloc_square(square=SQUARE, values=SQUARE):
+    keyboard = types.InlineKeyboardMarkup(row_width=2)
+    for button in SQUARE:
+        keyboard.insert(create_inline_callback_button(button, 'some price'))
+    keyboard.insert(create_inline_callback_button('Назад', 'back'))
+    return keyboard
+
+
+def create_inline_bloc_price(price=PRICE, values=PRICE):
+    keyboard = types.InlineKeyboardMarkup(row_width=2)
+    for button in PRICE:
         keyboard.insert(create_inline_callback_button(button, button))
     keyboard.insert(create_inline_callback_button('Назад', 'back'))
     return keyboard
