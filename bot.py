@@ -1,9 +1,9 @@
 import time
 
-
+from db.create_db import cursor
 from trash import BOT_TOKEN
 from aiogram import Bot, Dispatcher, executor, types
-from db.create_db import get_cursor
+
 from inline_keyboard.inline_keyboard import create_inline_bloc, \
                                             create_inline_callback_button, \
                                             alphabet_keyboard, \
@@ -11,7 +11,7 @@ from inline_keyboard.inline_keyboard import create_inline_bloc, \
                                             create_inline_bloc_square, \
                                             create_inline_bloc_price,\
                                             create_inline_bloc_list
-from inline_keyboard.inline_keyboard import REGION
+from inline_keyboard.inline_keyboard import REGION, all_region
 
 
 annika = Bot(token=BOT_TOKEN)
@@ -28,6 +28,15 @@ async def gazprom_handler(message: types.Message):
         )
     )
 
+
+async def query_list(data='Москва'):
+    num = 1
+    b = ''
+    a = cursor.execute(f'SELECT * FROM land WHERE region="{data}"')
+    for i in a:
+        b = b + str(num) + '. ' + i[1] + 'https://www.gazpromnoncoreassets.ru/' + i[3] + '\n'
+        num += 1
+    return b
 
 async def what_alphabet_region(callback: types.CallbackQuery):
     await callback.message.edit_text(text='Выберите букву области/субъекта',
@@ -54,9 +63,8 @@ async def plug(callback: types.CallbackQuery):
 
 
 async def list_of_land(callback: types.CallbackQuery):
-    await callback.message.edit_text(text='Пример\n1.Some /someurl,\n2.Some\
-/someurl,\n3.Some /someurl,\netc.',  reply_markup=create_inline_bloc_list())
 
+    await callback.message.edit_text(text=await query_list(callback.data), reply_markup=create_inline_bloc_list())
 
 
 async def object_card(callback: types.CallbackQuery):
@@ -74,8 +82,8 @@ dp.register_callback_query_handler(what_region,
                                    text=REGION.keys())
 dp.register_callback_query_handler(plug,
                                    text='back')
-dp.register_callback_query_handler(square,
-                                   text='some region')
+dp.register_callback_query_handler(list_of_land,
+                                   text=all_region)
 dp.register_callback_query_handler(price,
                                    text='some price')
 dp.register_callback_query_handler(list_of_land,
@@ -85,4 +93,5 @@ dp.register_callback_query_handler(object_card,
 
 
 if __name__ == '__main__':
+
     executor.start_polling(dp)
